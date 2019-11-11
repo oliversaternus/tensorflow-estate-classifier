@@ -37,6 +37,6 @@ app.use((err: any, req: any, res: any, next: any) => {
 
 const server = createServer(app);
 utils.loadModel().then(
-    () => server.listen(8989, () => {
-        console.log(`static server started at http://localhost:8989`);
+    () => server.listen(8383, () => {
+        console.log(`estate classifying server started at http://localhost:8383`);
     }));

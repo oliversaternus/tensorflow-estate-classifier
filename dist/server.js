@@ -48,7 +48,7 @@ app.use((err, req, res, next) => {
 });
 // #############################################################################
 const server = http_1.createServer(app);
-utils.loadModel().then(() => server.listen(8989, () => {
-    console.log(`static server started at http://localhost:8989`);
+utils.loadModel().then(() => server.listen(8383, () => {
+    console.log(`estate classifying server started at http://localhost:8383`);
 }));
 //# sourceMappingURL=server.js.map
