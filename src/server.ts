@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import cors from "cors";
 import express from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import { createServer } from "http";
@@ -8,6 +9,7 @@ import * as utils from "./tools/utils";
 const app: express.Application = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(fileUpload());
 
 // default resource

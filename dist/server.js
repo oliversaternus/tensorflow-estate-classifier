@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const http_1 = require("http");
@@ -28,6 +29,7 @@ const utils = __importStar(require("./tools/utils"));
 const app = express_1.default();
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
+app.use(cors_1.default());
 app.use(express_fileupload_1.default());
 // default resource
 app.get("/", catch_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
