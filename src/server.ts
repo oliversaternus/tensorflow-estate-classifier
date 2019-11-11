@@ -4,6 +4,7 @@ import express from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import { createServer } from "http";
 import autoCatch from "./tools/catch";
+import path from "path";
 import * as utils from "./tools/utils";
 
 const app: express.Application = express();
@@ -12,9 +13,12 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(fileUpload());
 
-// default resource
 app.get("/", autoCatch(async (req, res) => {
-    res.sendStatus(200);
+    res.sendFile(path.join(__dirname, "../", "assets", "index.html"));
+}));
+
+app.get("/dist/bundle.js", autoCatch(async (req, res) => {
+    res.sendFile(path.join(__dirname, "../", "assets", "bundle.js"));
 }));
 
 // #############################################################################
