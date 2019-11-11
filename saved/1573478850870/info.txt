@@ -1,0 +1,3 @@
+32 x 32
+black / white
+error 8.7%
