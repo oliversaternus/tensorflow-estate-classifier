@@ -27,7 +27,12 @@ app.get("/dist/bundle.js", autoCatch(async (req, res) => {
 app.post("/classify",
     autoCatch(async (req, res) => {
         const images: UploadedFile[] = req.files.images as UploadedFile[];
-        const classes = await Promise.all(images.map((image) => utils.classify(image.data)));
+        let classes: string[] = [];
+        while (images.length > 0) {
+            const chunk = images.splice(0, 10);
+            const processedChunk = await Promise.all(chunk.map((image) => utils.classify(image.data)));
+            classes = [...classes, ...processedChunk];
+        }
         res.status(200).send(classes);
     }));
 

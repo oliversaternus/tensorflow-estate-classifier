@@ -42,7 +42,12 @@ app.get("/dist/bundle.js", catch_1.default((req, res) => __awaiter(void 0, void 
 // classify images
 app.post("/classify", catch_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const images = req.files.images;
-    const classes = yield Promise.all(images.map((image) => utils.classify(image.data)));
+    let classes = [];
+    while (images.length > 0) {
+        const chunk = images.splice(0, 10);
+        const processedChunk = yield Promise.all(chunk.map((image) => utils.classify(image.data)));
+        classes = [...classes, ...processedChunk];
+    }
     res.status(200).send(classes);
 })));
 // #############################################################################
