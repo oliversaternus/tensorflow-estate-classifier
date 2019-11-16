@@ -12,33 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tfjs_node_1 = require("@tensorflow/tfjs-node");
 const child_process_1 = __importDefault(require("child_process"));
-const path_1 = __importDefault(require("path"));
 const sharp_1 = __importDefault(require("sharp"));
+const workerpool_1 = __importDefault(require("workerpool"));
 const alphabet = "VZx9bXuv0y5lIBJst2MpF6A7LDinQmC3o4fPwKEjkGrzgOhqaWH1cNde8Y";
-let model; // variable to store the neural net
-// returns the recognized class
-function predict(inputTensor) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const resultTensor = model.predict(inputTensor);
-        const result = yield resultTensor.argMax(1).array();
-        if (result[0] === 0) {
-            return "Grundriss";
-        }
-        if (result[0] === 1) {
-            return "Zimmer";
-        }
-        return "Fassade";
-    });
-}
-// loads the pretrained model
-function loadModel() {
-    return __awaiter(this, void 0, void 0, function* () {
-        model = yield tfjs_node_1.loadLayersModel("file://" + path_1.default.join(__dirname, "../", "../", "saved", "1573478850870", "model.json"));
-    });
-}
-exports.loadModel = loadModel;
+// worker pool to execute tensorflow code
+const pool = workerpool_1.default.pool(__dirname + "/worker.js");
 // classifies image buffer
 function classify(image) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -47,11 +26,8 @@ function classify(image) {
             .modulate({ saturation: 0 })
             .raw()
             .toBuffer();
-        const pixels = imageData.toJSON().data
-            .filter((num, index) => index % 3 === 0)
-            .map((num) => num / 255);
-        const pixelTensor = tfjs_node_1.tensor(pixels, [1, 36, 36, 1]);
-        return yield predict(pixelTensor);
+        const promisedResult = yield pool.exec("predict", [imageData]);
+        return yield promisedResult;
     });
 }
 exports.classify = classify;

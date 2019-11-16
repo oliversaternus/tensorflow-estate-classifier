@@ -22,12 +22,14 @@
     "@types/node": "^12.12.7",
     "@types/sharp": "^0.23.0",
     "@types/webgl2": "0.0.5",
+    "@types/workerpool": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6-alpha.6",
     "sharp": "^0.23.2",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "workerpool": "^5.0.2"
   }
 }

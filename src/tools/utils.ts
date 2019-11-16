@@ -1,29 +1,10 @@
-import { LayersModel, loadLayersModel, Rank, Tensor, tensor } from "@tensorflow/tfjs-node";
 import childProcess from "child_process";
-import path from "path";
 import sharp from "sharp";
+import workerpool from "workerpool";
 
 const alphabet: string = "VZx9bXuv0y5lIBJst2MpF6A7LDinQmC3o4fPwKEjkGrzgOhqaWH1cNde8Y";
-let model: LayersModel; // variable to store the neural net
-
-// returns the recognized class
-async function predict(inputTensor: Tensor<Rank>): Promise<string> {
-    const resultTensor = model.predict(inputTensor) as Tensor<Rank>;
-    const result: number[] = await resultTensor.argMax(1).array() as number[];
-    if (result[0] === 0) {
-        return "Grundriss";
-    }
-    if (result[0] === 1) {
-        return "Zimmer";
-    }
-    return "Fassade";
-}
-
-// loads the pretrained model
-export async function loadModel() {
-    model = await loadLayersModel(
-        "file://" + path.join(__dirname, "../", "../", "saved", "1573478850870", "model.json"));
-}
+// worker pool to execute tensorflow code
+const pool = workerpool.pool(__dirname + "/worker.js");
 
 // classifies image buffer
 export async function classify(image: Buffer) {
@@ -33,11 +14,8 @@ export async function classify(image: Buffer) {
         .raw()
         .toBuffer();
 
-    const pixels = imageData.toJSON().data
-        .filter((num, index) => index % 3 === 0)
-        .map((num) => num / 255);
-    const pixelTensor = tensor(pixels, [1, 36, 36, 1]);
-    return await predict(pixelTensor);
+    const promisedResult: Promise<string> = await pool.exec("predict", [imageData]);
+    return await promisedResult;
 }
 
 export function generateId(): string {

@@ -3,8 +3,8 @@ import cors from "cors";
 import express from "express";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import { createServer } from "http";
-import autoCatch from "./tools/catch";
 import path from "path";
+import autoCatch from "./tools/catch";
 import * as utils from "./tools/utils";
 
 const app: express.Application = express();
@@ -42,7 +42,6 @@ app.use((err: any, req: any, res: any, next: any) => {
 // #############################################################################
 
 const server = createServer(app);
-utils.loadModel().then(
-    () => server.listen(8383, () => {
-        console.log(`estate classifying server started at http://localhost:8383`);
-    }));
+server.listen(8383, () => {
+    console.log(`estate classifying server started at http://localhost:8383`);
+});

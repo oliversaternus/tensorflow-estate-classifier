@@ -24,6 +24,7 @@ const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const http_1 = require("http");
+const path_1 = __importDefault(require("path"));
 const catch_1 = __importDefault(require("./tools/catch"));
 const utils = __importStar(require("./tools/utils"));
 const app = express_1.default();
@@ -31,9 +32,11 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 app.use(cors_1.default());
 app.use(express_fileupload_1.default());
-// default resource
 app.get("/", catch_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.sendStatus(200);
+    res.sendFile(path_1.default.join(__dirname, "../", "assets", "index.html"));
+})));
+app.get("/dist/bundle.js", catch_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.sendFile(path_1.default.join(__dirname, "../", "assets", "bundle.js"));
 })));
 // #############################################################################
 // classify images
@@ -50,7 +53,7 @@ app.use((err, req, res, next) => {
 });
 // #############################################################################
 const server = http_1.createServer(app);
-utils.loadModel().then(() => server.listen(8383, () => {
+server.listen(8383, () => {
     console.log(`estate classifying server started at http://localhost:8383`);
-}));
+});
 //# sourceMappingURL=server.js.map
