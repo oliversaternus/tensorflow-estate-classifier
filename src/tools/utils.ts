@@ -14,8 +14,8 @@ export async function classify(image: Buffer) {
         .raw()
         .toBuffer();
 
-    const promisedResult: Promise<string> = await pool.exec("predict", [imageData]);
-    return await promisedResult;
+    const result: string = await pool.exec("predict", [imageData]);
+    return result;
 }
 
 export function generateId(): string {

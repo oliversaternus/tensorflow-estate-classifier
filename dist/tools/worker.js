@@ -20,23 +20,27 @@ let model;
 // main function to be executed by the worker
 function predict(input) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!model) {
-            model = yield tfjs_node_1.loadLayersModel("file://" + path_1.default.join(__dirname, "../", "../", "saved", "1573478850870", "model.json"));
-        }
-        const pixels = input.data
-            .filter((num, index) => index % 3 === 0)
-            .map((num) => num / 255);
-        const pixelTensor = tfjs_node_1.tensor(pixels, [1, 36, 36, 1]);
-        const resultTensor = model.predict(pixelTensor);
-        return resultTensor.argMax(1).array().then((result) => {
-            if (result[0] === 0) {
+        try {
+            if (!model) {
+                model = yield tfjs_node_1.loadLayersModel("file://" + path_1.default.join(__dirname, "../", "../", "saved", "1573478850870", "model.json"));
+            }
+            const pixels = input.data
+                .filter((num, index) => index % 3 === 0)
+                .map((num) => num / 255);
+            const pixelTensor = tfjs_node_1.tensor(pixels, [1, 36, 36, 1]);
+            const resultTensor = model.predict(pixelTensor);
+            const resultVector = yield resultTensor.argMax(1).array();
+            if (resultVector[0] === 0) {
                 return "Grundriss";
             }
-            if (result[0] === 1) {
+            if (resultVector[0] === 1) {
                 return "Zimmer";
             }
             return "Fassade";
-        });
+        }
+        catch (e) {
+            return "undefined";
+        }
     });
 }
 workerpool_1.default.worker({

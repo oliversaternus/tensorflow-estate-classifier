@@ -26,8 +26,8 @@ function classify(image) {
             .modulate({ saturation: 0 })
             .raw()
             .toBuffer();
-        const promisedResult = yield pool.exec("predict", [imageData]);
-        return yield promisedResult;
+        const result = yield pool.exec("predict", [imageData]);
+        return result;
     });
 }
 exports.classify = classify;

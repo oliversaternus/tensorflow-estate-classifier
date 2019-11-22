@@ -43,6 +43,9 @@ app.get("/dist/bundle.js", catch_1.default((req, res) => __awaiter(void 0, void 
 app.post("/classify", catch_1.default((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const images = req.files.images;
     let classes = [];
+    if (images && !images.length) {
+        classes = [yield utils.classify(images.data)];
+    }
     while (images.length > 0) {
         const chunk = images.splice(0, 10);
         const processedChunk = yield Promise.all(chunk.map((image) => utils.classify(image.data)));
