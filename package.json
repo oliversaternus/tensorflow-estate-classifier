@@ -31,6 +31,7 @@
     "@types/express-fileupload": "^1.1.0",
     "@types/node": "^12.12.7",
     "@types/sharp": "^0.23.0",
+    "@types/webgl2": "0.0.5",
     "@types/workerpool": "^5.0.0"
   }
 }
