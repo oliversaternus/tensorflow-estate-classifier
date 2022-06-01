@@ -18,7 +18,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6-alpha.6",
-    "sharp": "^0.23.2",
+    "sharp": "^0.30.5",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2",
     "workerpool": "^5.0.2"
